@@ -40,14 +40,14 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (data, status) {
                     alert("data:" + data.message)
-                    if (data.code == 1) {
+                    if (data.code == 200) {
                         setTimeout(function () {
                             window.location.href = "/login"
                         }, 1000)
                     }
                 },
                 err: function (data, status) {
-                    alert("err:" + data.message + ":" + status)
+                    alert("err:" + data.Message + ":" + status)
                 }
             })
         }
@@ -78,21 +78,21 @@ $(document).ready(function () {
         },
         submitHandler: function (form) {
             var urlStr = "/login"
-            alert("urlStr:" + urlStr)
+            //alert("urlStr:" + urlStr)
             $(form).ajaxSubmit({
                 url: urlStr,
                 type: "post",
                 dataType: "json",
                 success: function (data, status) {
-                    alert("data:" + data.message + ":" + status)
-                    if (data.code == 1) {
+                    alert("data:" + data.Message + ":" + status)
+                    if (data.code == 200) {
                         setTimeout(function () {
                             window.location.href = "/"
                         }, 1000)
                     }
                 },
                 error: function (data, status) {
-                    alert("err:" + data.message + ":" + status)
+                    alert("err:" + data.Message + ":" + status)
 
                 }
             });
@@ -175,7 +175,7 @@ $(document).ready(function () {
             processData: false,
             success: function (data, status) {
                 alert(":data:" + data.message);
-                if (data.code == 1) {
+                if (data.code == 200) {
                     setTimeout(function () {
                         window.location.href = "/album"
                     }, 1000)

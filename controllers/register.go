@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/core/logs"
 	beego "github.com/beego/beego/v2/server/web"
@@ -34,7 +33,8 @@ func (this *RegisterController) Post() {
 	//注册之前先判断该用户名是否已经被注册，如果已经注册，返回错误 (数据库username字段设置唯一即可)
 	o := orm.NewOrm()
 	user := models.User{Username: username}
-	err := o.Read(&user)
+	err := o.Read(&user, "username")
+	logs.Info(err)
 	if err != orm.ErrNoRows {
 		logs.Info("%s 重复", username)
 		this.send_json(200, "用户名已经存在", "nil")
@@ -60,21 +60,56 @@ func (this *RegisterController) Post() {
 
 func (this *RegisterController) send_json(code int, msg string, data interface{}) {
 	type returnDataStruct struct {
-		Code int
-		Msg  string
-		Data interface{}
+		Code    int
+		Message string
+		Data    interface{}
 	}
 
 	returnJson := returnDataStruct{
-		Code: code,
-		Msg:  msg,
-		Data: data,
+		Code:    code,
+		Message: msg,
+		Data:    data,
 	}
 
-	ret, err := json.Marshal(returnJson)
-	if err != nil {
-		logs.Error("json marshal error:", err)
+	//ret, err := json.Marshal(returnJson)
+	//if err != nil {
+	//	logs.Error("json marshal error:", err)
+	//}
+	//this.Ctx.ResponseWriter.Write(ret)
+	//this.StopRun()
+	this.Data["json"] = &returnJson
+	this.ServeJSON()
+}
+
+// @router /login/ [get]
+func (this *RegisterController) LoginGet() {
+	this.TplName = "login.html"
+}
+
+// @router /login/ [post]
+func (this *RegisterController) LoginPost() {
+	username := this.GetString("username")
+	password := this.GetString("password")
+	o := orm.NewOrm()
+	qs := o.QueryTable("user")
+	var user models.User
+	err := qs.Filter("username", username).Filter("password", utils.MD5(password)).One(&user)
+	//logs.Error(err)
+	if err == orm.ErrNoRows {
+		logs.Info("%s 账号或密码错误", username)
+		this.send_json(403, "账号或密码错误", "False")
+	} else if err == nil {
+		logs.Info("%s 账号密码正确", username)
+		this.SetSession("loginuser", username)
+		this.send_json(200, "账号验证成功", "True")
+	} else {
+		logs.Error("%s 查询异常", username)
+		this.send_json(500, "内部错误，请联系管理员", "False")
 	}
-	this.Ctx.ResponseWriter.Write(ret)
-	this.StopRun()
+	if user.Id > 0 {
+		this.SetSession("loginuser", username)
+		//this.send_json(200, "登陆成功", "True")
+	} else {
+		this.send_json(500, "登陆失败", "False")
+	}
 }
