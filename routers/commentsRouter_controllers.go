@@ -7,11 +7,29 @@ import (
 
 func init() {
 
-	beego.GlobalControllerRouter["myblog/controllers:BaseController"] = append(beego.GlobalControllerRouter["myblog/controllers:BaseController"],
+	beego.GlobalControllerRouter["myblog/controllers:ArticleController"] = append(beego.GlobalControllerRouter["myblog/controllers:ArticleController"],
 		beego.ControllerComments{
-			Method:           "Homeget",
-			Router:           "/",
+			Method:           "ArticleShowGet",
+			Router:           "/article/:id",
 			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["myblog/controllers:ArticleController"] = append(beego.GlobalControllerRouter["myblog/controllers:ArticleController"],
+		beego.ControllerComments{
+			Method:           "AddArticleGet",
+			Router:           "/article/add",
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["myblog/controllers:ArticleController"] = append(beego.GlobalControllerRouter["myblog/controllers:ArticleController"],
+		beego.ControllerComments{
+			Method:           "AddArticlePost",
+			Router:           "/article/add",
+			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
 			Filters:          nil,
 			Params:           nil})
@@ -20,6 +38,15 @@ func init() {
 		beego.ControllerComments{
 			Method:           "ExitGet",
 			Router:           "/exit/",
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["myblog/controllers:HomeController"] = append(beego.GlobalControllerRouter["myblog/controllers:HomeController"],
+		beego.ControllerComments{
+			Method:           "HomeGet",
+			Router:           "/",
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
 			Filters:          nil,

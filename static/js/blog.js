@@ -135,7 +135,7 @@ $(document).ready(function () {
             if (artId > 0) {
                 urlStr = "/article/update"
             }
-            alert("urlStr:" + urlStr);
+            //alert("urlStr:" + urlStr);
             $(form).ajaxSubmit({
                 url: urlStr,
                 type: "post",

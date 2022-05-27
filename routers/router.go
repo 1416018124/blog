@@ -7,5 +7,6 @@ import (
 
 func init() {
 	//beego.Router("/", &controllers.MainController{})
-	beego.Include(&controllers.RegisterController{}, &controllers.BaseController{})
+	beego.Include(&controllers.RegisterController{}, &controllers.BaseController{}, &controllers.ArticleController{},
+		&controllers.HomeController{})
 }

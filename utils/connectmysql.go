@@ -42,7 +42,7 @@ func InitMysql() {
 	logs.Info("连接数据库成功")
 
 	//数据库配置
-	orm.RegisterModel(new(models.User))
+	orm.RegisterModel(new(models.User), new(models.Article))
 	orm.RunSyncdb("default", false, true)
 
 }

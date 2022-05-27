@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"github.com/beego/beego/v2/core/logs"
 	beego "github.com/beego/beego/v2/server/web"
 )
 
@@ -28,11 +27,11 @@ func (this *BaseController) Prepare() {
 
 // Home 代码部分
 
-// @router / [get]
-func (this *BaseController) Homeget() {
-	logs.Info("%s Login type:", this.Loginuser, this.IsLogin)
-	this.TplName = "home.html"
-}
+//// @router / [get]
+//func (this *BaseController) Homeget() {
+//	logs.Info("%s Login type:", this.Loginuser, this.IsLogin)
+//	this.TplName = "home.html"
+//}
 
 //EXIT 用户登录部分
 // @router /exit/ [get]
@@ -40,4 +39,27 @@ func (this *BaseController) ExitGet() {
 	this.DelSession("loginuser")
 	this.Data["isLogin"] = false
 	this.Redirect("/", 302)
+}
+
+func (this *BaseController) send_json(code int, msg string, data interface{}) {
+	type returnDataStruct struct {
+		Code    int
+		Message string
+		Data    interface{}
+	}
+
+	returnJson := returnDataStruct{
+		Code:    code,
+		Message: msg,
+		Data:    data,
+	}
+
+	//ret, err := json.Marshal(returnJson)
+	//if err != nil {
+	//	logs.Error("json marshal error:", err)
+	//}
+	//this.Ctx.ResponseWriter.Write(ret)
+	//this.StopRun()
+	this.Data["json"] = &returnJson
+	this.ServeJSON()
 }

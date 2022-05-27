@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/beego/beego/v2/client/orm"
 	"time"
+
+	"github.com/beego/beego/v2/client/orm"
 )
 
 type User struct {
