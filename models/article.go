@@ -60,7 +60,7 @@ func QueryArticleWithId(id int) Article {
 func QueryArticleWithParam(param string) map[string]int {
 	o := orm.NewOrm()
 	var list orm.ParamsList
-	_, err := o.QueryTable("article").ValuesFlat(&list, "tags")
+	_, err := o.QueryTable("article").ValuesFlat(&list, param)
 	if err != nil {
 		logs.Error(err)
 	}
@@ -80,4 +80,10 @@ func QueryArticleWithParam(param string) map[string]int {
 	}
 	logs.Error(tagsMap)
 	return tagsMap
+}
+
+func QueryArticleWithTag(tag string) (art []Article) {
+	o := orm.NewOrm()
+	o.QueryTable("article").Filter("tags", tag).All(&art)
+	return art
 }

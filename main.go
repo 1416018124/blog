@@ -8,8 +8,9 @@ import (
 )
 
 func init() {
-	utils.InitMysql()  //初始化Mysql
-	utils.InitLogger() //调用logger初始化
+	utils.InitMysql()   //初始化Mysql
+	utils.InitLogger()  //调用logger初始化
+	utils.InitSession() //InitSession
 }
 
 func main() {
