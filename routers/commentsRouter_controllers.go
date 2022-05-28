@@ -34,6 +34,42 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["myblog/controllers:ArticleController"] = append(beego.GlobalControllerRouter["myblog/controllers:ArticleController"],
+		beego.ControllerComments{
+			Method:           "ArticleDeleteGet",
+			Router:           "/article/delete",
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["myblog/controllers:ArticleController"] = append(beego.GlobalControllerRouter["myblog/controllers:ArticleController"],
+		beego.ControllerComments{
+			Method:           "ArticleUpdateGet",
+			Router:           "/article/update",
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["myblog/controllers:ArticleController"] = append(beego.GlobalControllerRouter["myblog/controllers:ArticleController"],
+		beego.ControllerComments{
+			Method:           "ArticleUpdatePost",
+			Router:           "/article/update",
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["myblog/controllers:ArticleController"] = append(beego.GlobalControllerRouter["myblog/controllers:ArticleController"],
+		beego.ControllerComments{
+			Method:           "TagsGet",
+			Router:           "/tags",
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["myblog/controllers:BaseController"] = append(beego.GlobalControllerRouter["myblog/controllers:BaseController"],
 		beego.ControllerComments{
 			Method:           "ExitGet",

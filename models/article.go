@@ -1,6 +1,7 @@
 package models
 
 import (
+	"reflect"
 	"time"
 
 	"github.com/beego/beego/v2/client/orm"
@@ -53,4 +54,30 @@ func QueryArticleWithId(id int) Article {
 		logs.Error("查询数据库异常:", err)
 	}
 	return article
+}
+
+//查询数据库中的指定标签的文章，返回列表
+func QueryArticleWithParam(param string) map[string]int {
+	o := orm.NewOrm()
+	var list orm.ParamsList
+	_, err := o.QueryTable("article").ValuesFlat(&list, "tags")
+	if err != nil {
+		logs.Error(err)
+	}
+	tagsMap := map[string]int{}
+	if reflect.TypeOf(list).Kind() == reflect.Slice {
+		s := reflect.ValueOf(list)
+		logs.Error(s.Len())
+		for i := 0; i < s.Len(); i++ {
+			ele := s.Index(i).Interface().(string)
+			_, ok := tagsMap[ele]
+			if ok {
+				tagsMap[ele] += 1
+			} else {
+				tagsMap[ele] = 1
+			}
+		}
+	}
+	logs.Error(tagsMap)
+	return tagsMap
 }

@@ -1,9 +1,12 @@
 package controllers
 
 import (
+	"strconv"
+
 	"myblog/models"
 	"myblog/utils"
-	"strconv"
+
+	"github.com/beego/beego/v2/client/orm"
 )
 
 type ArticleController struct {
@@ -44,4 +47,56 @@ func (this *ArticleController) ArticleShowGet() {
 	this.Data["Title"] = art.Title
 	this.Data["Content"] = utils.SwitchMarkdownToHtml(art.Content)
 	this.TplName = "show_article.html"
+}
+
+// @router /article/update [get]
+func (this *ArticleController) ArticleUpdateGet() {
+	id, _ := this.GetInt("id")
+	art := models.QueryArticleWithId(id)
+	this.Data["Title"] = art.Title
+	this.Data["Tags"] = art.Tags
+	this.Data["Short"] = art.Short
+	this.Data["Content"] = art.Content
+	this.Data["Id"] = art.Id
+	this.TplName = "write_article.html"
+}
+
+// @router /article/update [post]
+func (this *ArticleController) ArticleUpdatePost() {
+	id, _ := this.GetInt("id")
+	//获取浏览器传输的数据，通过表单的name属性获取值
+	title := this.GetString("title")
+	tags := this.GetString("tags")
+	short := this.GetString("short")
+	content := this.GetString("content")
+
+	art := models.Article{
+		Id:      id,
+		Title:   title,
+		Tags:    tags,
+		Short:   short,
+		Content: content,
+	}
+	o := orm.NewOrm()
+	_, err := o.Update(&art)
+	if err != nil {
+		this.send_json(200, "更新成功", "True")
+	} else {
+		this.send_json(500, "更新失败", "False")
+	}
+}
+
+// @router /article/delete [get]
+func (this *ArticleController) ArticleDeleteGet() {
+	id, _ := this.GetInt("id")
+	o := orm.NewOrm()
+	o.Delete(&models.Article{Id: id})
+	this.Redirect("/", 302)
+
+}
+
+// @router /tags
+func (this *ArticleController) TagsGet() {
+	this.Data["Tags"] = models.QueryArticleWithParam("tags")
+	this.TplName = "tags.html"
 }

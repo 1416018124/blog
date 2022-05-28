@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/beego/beego/v2/core/logs"
 	"myblog/models"
 )
 
@@ -19,7 +18,6 @@ func (this *HomeController) HomeGet() {
 	var artList []models.Article
 	artList, _ = models.FindArticleWithPage(page)
 	this.Data["PageCode"] = models.ConfigHomeFooterPageCode(page)
-	logs.Error("aaaaaaaaaaaaa")
 	this.Data["HasFooter"] = true
 	fmt.Println("IsLogin:", this.IsLogin, this.Loginuser)
 	this.Data["Content"] = models.MakeHomeBlocks(artList, this.IsLogin)
